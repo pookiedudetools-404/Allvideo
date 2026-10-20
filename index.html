@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Video Super-Tool Platform — 30+ free browser-based video tools. No upload. No signup. 100% private." />
+  <title>Video Super-Tool Platform — 30+ Free Browser Tools</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.5); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .hidden { display: none !important; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-spin-slow { animation: spin 1s linear infinite; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased">
+
+  <div id="toast-container" class="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+
+  <div id="loading-overlay" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[9998] flex items-center justify-center">
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin-slow"></div>
+      <p class="text-slate-300 text-sm font-medium">Loading tool…</p>
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#/" onclick="goHome(event)" class="flex items-center gap-2 group">
+          <span class="text-2xl">🎬</span>
+          <span class="font-extrabold text-lg tracking-tight">Video<span class="gradient-text">Toolkit</span></span>
+        </a>
+        <nav class="flex items-center gap-3">
+          <span class="hidden sm:inline-block text-xs font-medium px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">100% Free</span>
+          <a href="https://github.com" target="_blank" rel="noopener" class="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition" aria-label="GitHub">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-.98-.01-1.92-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.24 2.76.12 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .3.21.66.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="view-home">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent pointer-events-none"></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10 text-center relative">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-medium text-indigo-300 mb-6">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          30+ Tools · No Upload · Runs 100% in Your Browser
+        </div>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
+          The <span class="gradient-text">Ultimate</span> Video Toolbox
+        </h1>
+        <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-8">
+          Download, convert, trim, compress, extract audio, record, and edit videos — all in your browser. Your files never leave your device.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500">
+          <span class="flex items-center gap-1.5">✅ No signup</span>
+          <span class="flex items-center gap-1.5">🔒 Private</span>
+          <span class="flex items-center gap-1.5">⚡ Fast</span>
+          <span class="flex items-center gap-1.5">💸 Forever free</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="search-input" type="text" placeholder="Search tools…" class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 placeholder:text-slate-500" />
+        </div>
+      </div>
+      <div id="filter-bar" class="flex flex-wrap gap-2 mt-4"></div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div id="tool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+      <div id="no-results" class="hidden text-center py-16 text-slate-500">
+        <p class="text-4xl mb-3">🔍</p>
+        <p class="font-medium">No tools match your search.</p>
+      </div>
+    </section>
+  </main>
+
+  <main id="view-tool" class="hidden">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <button onclick="goHome()" class="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-100 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Tools
+      </button>
+      <div id="tool-workspace" class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 min-h-[400px]"></div>
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-800/80 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+      <p>© <span id="year"></span> VideoToolkit · Made with ❤️ · Powered by GitHub Pages · 100% client-side</p>
+    </div>
+  </footer>
+
+  <script>
+    const TOOLS = [
+      { id: 'downloader', name: 'Universal Downloader', icon: '⬇️', desc: 'Download any video from direct URLs, with CORS fallback and HLS support.', category: 'download', module: './tools/downloader.js' },
+      { id: 'hls-extractor', name: 'HLS / M3U8 Extractor', icon: '📡', desc: 'Extract and merge .m3u8 stream segments into a single file.', category: 'download', module: './tools/hls-extractor.js' },
+      { id: 'thumbnail-grabber', name: 'Thumbnail Grabber', icon: '🖼️', desc: 'Extract thumbnail frames from any video URL.', category: 'download', module: './tools/thumbnail-grabber.js' },
+      { id: 'video-to-mp3', name: 'Video → MP3', icon: '🎵', desc: 'Convert any video to audio (MP3 / WAV) directly in browser.', category: 'convert', module: './tools/video-to-mp3.js' },
+      { id: 'video-to-gif', name: 'Video → GIF', icon: '🎞️', desc: 'Turn video clips into optimized animated GIFs.', category: 'convert', module: './tools/video-to-gif.js' },
+      { id: 'format-converter', name: 'Format Converter', icon: '🔄', desc: 'Convert between MP4, WebM, MOV, MKV and more.', category: 'convert', module: './tools/format-converter.js' },
+      { id: 'aspect-changer', name: 'Aspect Ratio Changer', icon: '📐', desc: 'Change video aspect ratio (16:9, 9:16, 1:1, 4:5).', category: 'convert', module: './tools/aspect-changer.js' },
+      { id: 'resolution-upscaler', name: 'Resolution Upscaler', icon: '🔍', desc: 'Upscale video resolution client-side (2x, 4x).', category: 'convert', module: './tools/resolution-upscaler.js' },
+      { id: 'video-trimmer', name: 'Video Trimmer', icon: '✂️', desc: 'Trim video start/end points visually.', category: 'edit', module: './tools/video-trimmer.js' },
+      { id: 'video-merger', name: 'Video Merger', icon: '🔗', desc: 'Merge multiple clips into one video.', category: 'edit', module: './tools/video-merger.js' },
+      { id: 'video-compressor', name: 'Video Compressor', icon: '🗜️', desc: 'Reduce file size while keeping quality.', category: 'edit', module: './tools/video-compressor.js' },
+      { id: 'video-rotator', name: 'Video Rotator', icon: '🔃', desc: 'Rotate video 90°, 180° or flip horizontally.', category: 'edit', module: './tools/video-rotator.js' },
+      { id: 'video-speed', name: 'Speed Changer', icon: '⏩', desc: 'Speed up or slow down video 0.25x–4x.', category: 'edit', module: './tools/video-speed.js' },
+      { id: 'video-reverser', name: 'Video Reverser', icon: '⏪', desc: 'Play video backwards as a new file.', category: 'edit', module: './tools/video-reverser.js' },
+      { id: 'watermark-adder', name: 'Watermark Adder', icon: '💧', desc: 'Add text or image watermarks to video.', category: 'edit', module: './tools/watermark-adder.js' },
+      { id: 'frame-capture', name: 'Frame Capture', icon: '📸', desc: 'Grab still frames from any video timestamp.', category: 'edit', module: './tools/frame-capture.js' },
+      { id: 'video-stabilizer', name: 'Video Stabilizer', icon: '🎯', desc: 'Basic stabilization for shaky footage.', category: 'edit', module: './tools/video-stabilizer.js' },
+      { id: 'pip', name: 'Picture-in-Picture', icon: '🖼️', desc: 'Overlay one video on top of another.', category: 'edit', module: './tools/pip.js' },
+      { id: 'chroma-key', name: 'Chroma Key', icon: '🟩', desc: 'Remove green screen backgrounds from video.', category: 'edit', module: './tools/chroma-key.js' },
+      { id: 'voice-isolation', name: 'Voice Isolation', icon: '🎤', desc: 'Separate vocals from background music.', category: 'audio', module: './tools/voice-isolation.js' },
+      { id: 'audio-enhancer', name: 'Audio Enhancer', icon: '🎚️', desc: 'Boost volume, remove noise, normalize audio.', category: 'audio', module: './tools/audio-enhancer.js' },
+      { id: 'audio-trimmer', name: 'Audio Trimmer', icon: '✂️', desc: 'Cut audio clips with precise start/end.', category: 'audio', module: './tools/audio-trimmer.js' },
+      { id: 'silent-remover', name: 'Silent Audio Remover', icon: '🔇', desc: 'Auto-detect and remove silent sections.', category: 'audio', module: './tools/silent-remover.js' },
+      { id: 'audio-visualizer', name: 'Audio Visualizer', icon: '📊', desc: 'Render waveform videos from audio files.', category: 'audio', module: './tools/audio-visualizer.js' },
+      { id: 'subtitle-extractor', name: 'Subtitle Extractor', icon: '💬', desc: 'Extract or generate subtitles from video.', category: 'audio', module: './tools/subtitle-extractor.js' },
+      { id: 'screen-recorder', name: 'Screen Recorder', icon: '🖥️', desc: 'Record your screen with mic + webcam.', category: 'record', module: './tools/screen-recorder.js' },
+      { id: 'webcam-recorder', name: 'Webcam Recorder', icon: '📹', desc: 'Record webcam video and audio.', category: 'record', module: './tools/webcam-recorder.js' },
+      { id: 'metadata-viewer', name: 'Metadata Viewer', icon: '🧾', desc: 'Inspect video/audio metadata and streams.', category: 'analyze', module: './tools/metadata-viewer.js' },
+      { id: 'media-info', name: 'Media Info', icon: 'ℹ️', desc: 'Detailed technical info on any media file.', category: 'analyze', module: './tools/media-info.js' },
+      { id: 'batch-rename', name: 'Batch Renamer', icon: '🏷️', desc: 'Bulk-rename media files with patterns.', category: 'analyze', module: './tools/batch-rename.js' },
+    ];
+
+    const CATEGORIES = [
+      { id: 'all', label: 'All Tools', icon: '✨' },
+      { id: 'download', label: 'Download', icon: '⬇️' },
+      { id: 'convert', label: 'Convert', icon: '🔄' },
+      { id: 'edit', label: 'Edit', icon: '✏️' },
+      { id: 'audio', label: 'Audio', icon: '🎵' },
+      { id: 'record', label: 'Record', icon: '📹' },
+      { id: 'analyze', label: 'Analyze', icon: '🔍' },
+    ];
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let currentToolModule = null;
+
+    function showToast(message, type = 'info', duration = 3500) {
+      const container = document.getElementById('toast-container');
+      const colors = {
+        info: 'bg-slate-800 border-slate-700 text-slate-100',
+        success: 'bg-emerald-900/90 border-emerald-700 text-emerald-100',
+        error: 'bg-red-900/90 border-red-700 text-red-100',
+        warning: 'bg-amber-900/90 border-amber-700 text-amber-100',
+      };
+      const icons = { info: 'ℹ️', success: '✅', error: '❌', warning: '⚠️' };
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl border shadow-lg max-w-sm text-sm font-medium fade-in ${colors[type] || colors.info}`;
+      toast.innerHTML = `<span class="shrink-0">${icons[type] || icons.info}</span><span class="flex-1">${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(20px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, duration);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function renderFilters() {
+      const bar = document.getElementById('filter-bar');
+      bar.innerHTML = CATEGORIES.map((c) => `
+        <button data-cat="${c.id}" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold border transition ${
+          c.id === activeCategory
+            ? 'bg-indigo-600 border-indigo-500 text-white'
+            : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+        }">${c.icon} ${c.label}</button>
+      `).join('');
+      bar.querySelectorAll('.filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.cat;
+          renderFilters();
+          renderTools();
+        });
+      });
+    }
+
+    function renderTools() {
+      const grid = document.getElementById('tool-grid');
+      const noResults = document.getElementById('no-results');
+      const q = searchQuery.trim().toLowerCase();
+      const filtered = TOOLS.filter((t) => {
+        const matchCat = activeCategory === 'all' || t.category === activeCategory;
+        const matchSearch = !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.id.includes(q);
+        return matchCat && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+      noResults.classList.add('hidden');
+
+      grid.innerHTML = filtered.map((t) => `
+        <button data-tool-id="${t.id}" class="tool-card card-hover text-left bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 group">
+          <div class="flex items-start justify-between">
+            <span class="text-3xl">${t.icon}</span>
+            <span class="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-slate-800 text-slate-400 font-bold">${t.category}</span>
+          </div>
+          <h3 class="font-bold text-slate-100 group-hover:text-indigo-300 transition">${escapeHtml(t.name)}</h3>
+          <p class="text-xs text-slate-400 leading-relaxed flex-1">${escapeHtml(t.desc)}</p>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+            <span class="text-[11px] text-slate-500">Client-side</span>
+            <span class="text-xs font-semibold text-indigo-400 group-hover:text-indigo-300 flex items-center gap-1">
+              Open <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </button>
+      `).join('');
+
+      grid.querySelectorAll('.tool-card').forEach((card) => {
+        card.addEventListener('click', () => openTool(card.dataset.toolId));
+      });
+    }
+
+    function showHome() {
+      document.getElementById('view-home').classList.remove('hidden');
+      document.getElementById('view-tool').classList.add('hidden');
+      document.title = 'Video Super-Tool Platform — 30+ Free Browser Tools';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function showToolView() {
+      document.getElementById('view-home').classList.add('hidden');
+      document.getElementById('view-tool').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    async function openTool(toolId) {
+      const tool = TOOLS.find((t) => t.id === toolId);
+      if (!tool) {
+        showToast(`Unknown tool: ${toolId}`, 'error');
+        return;
+      }
+
+      if (location.hash !== `#/tool/${toolId}`) {
+        history.pushState({ toolId }, '', `#/tool/${toolId}`);
+      }
+
+      const overlay = document.getElementById('loading-overlay');
+      overlay.classList.remove('hidden');
+      const workspace = document.getElementById('tool-workspace');
+      workspace.innerHTML = '';
+
+      if (currentToolModule && typeof currentToolModule.cleanup === 'function') {
+        try { currentToolModule.cleanup(); } catch (e) { console.warn('Tool cleanup error:', e); }
+      }
+      currentToolModule = null;
+
+      try {
+        const cacheBust = tool.module + (tool.module.includes('?') ? '&' : '?') + 'v=' + Date.now();
+        const module = await import(cacheBust);
+        const renderFn = module.default;
+        if (typeof renderFn !== 'function') {
+          throw new Error(`Tool "${toolId}" did not export a default render function.`);
+        }
+        document.title = `${tool.name} — VideoToolkit`;
+        showToolView();
+        await renderFn(workspace);
+        currentToolModule = module;
+        overlay.classList.add('hidden');
+      } catch (err) {
+        overlay.classList.add('hidden');
+        showToolView();
+        console.error(`Failed to load tool "${toolId}":`, err);
+        workspace.innerHTML = `
+          <div class="text-center py-16">
+            <p class="text-5xl mb-4">🚧</p>
+            <h2 class="text-xl font-bold mb-2 text-slate-100">${escapeHtml(tool.name)} is not deployed yet</h2>
+            <p class="text-sm text-slate-400 mb-6 max-w-md mx-auto">This tool's code is coming soon.</p>
+            <p class="text-xs text-slate-600 mb-6 font-mono">Missing file: ${escapeHtml(tool.module)}</p>
+            <button onclick="goHome()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition">← Back to all tools</button>
+          </div>
+        `;
+      }
+    }
+
+    function goHome(event) {
+      if (event && typeof event.preventDefault === 'function') event.preventDefault();
+      if (location.hash && location.hash !== '#/') {
+        history.pushState({}, '', '#/');
+      }
+      if (currentToolModule && typeof currentToolModule.cleanup === 'function') {
+        try { currentToolModule.cleanup(); } catch (e) { console.warn(e); }
+      }
+      currentToolModule = null;
+      document.getElementById('tool-workspace').innerHTML = '';
+      showHome();
+    }
+
+    function handleRoute() {
+      const hash = location.hash || '#/';
+      const match = hash.match(/^#\/tool\/([\w-]+)$/);
+      if (match) {
+        openTool(match[1]);
+      } else {
+        showHome();
+      }
+    }
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('popstate', handleRoute);
+
+    window.showToast = showToast;
+    window.goHome = goHome;
+    window.openTool = openTool;
+    window.VIDEO_TOOLKIT = { TOOLS, version: '1.0.0' };
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderTools();
+    });
+
+    (function boot() {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      renderFilters();
+      renderTools();
+      handleRoute();
+    })();
+  </script>
+</body>
+</html>
